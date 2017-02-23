@@ -1,0 +1,38 @@
+Empezamos haciendo las listas de los atributos, incluyendo los nombres de las personas en cada atributo que tenga.
+
+
+estrategia basica
+
+
+
+seleccion aleatoria personaje (randomselect)
+listar caracteristicas del personaje
+
+
+seleccion aleatoria personaje maquina
+
+
+preguntas jugador --> write
+		  --> read
+analisis de la respuesta
+listar personajes que cumplan esa caracteristica
+
+
+pregunta maquina
+analisis de la respuesta
+almacenar candidatos posibles
+
+(2 listas, la de los posibles del jugador, la de los posibles de la maquina)
+
+tres formas de hacer la base de conoimiento
+
+estilo corleone (todo predicados)
+listas -->lista de atributos por cada personaje
+       -->lista de personajes por cada caracteristica
+
+random (n1, X, N2) -> x
+nth1(personaje,X) -> Sam
+
+
+
+
