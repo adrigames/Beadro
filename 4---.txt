@@ -1,0 +1,103 @@
+
+:-consult(quienEsQuien).
+
+% Consultas
+
+
+%------------------------------------------------------------------------------
+% Funciones
+%------------------------------------------------------------------------------
+
+%existe(_,[]):-fail.
+%existe(X,[X|_]):-!.
+%existe(X,[_|R]):-existe(X,R).
+
+
+existe(X,[X|_]).
+existe(X,[_|Lista]) :- existe(X,Lista).
+
+
+% (pos(P,L,POS) -> write('si esta  '),writeln(POS); writeln('no esta  '))
+
+
+
+pos(X,[X|_],0).
+pos(_,[],_):-!,fail.
+pos(X,[_|R],Pos):-pos(X,R,Pos1),Pos is Pos1+1.
+
+
+mostrar([]).
+mostrar([ELEM| LIS]):-writeln(ELEM),mostrar(LIS).
+
+quien_empieza:-random(0,2,NUM),write(NUM),
+ (NUM ==0 ->writeln('\n\n--------Empieza el jugador--------'); writeln('\n\n--------Empieza la maquina--------')).
+
+
+pregunta_jugador(PREG):-writeln('\n\nLas preguntas posibles son: '),preguntas(P),
+write(P '\nIntroduce la pregunta:   '), read(PREG),write(PREG).
+             
+
+maquina(PREG,PERPC):- write('\n---33'),write(PERPC) ,
+(existe(PREG,PERPC)->write('\nSi es \n'PREG);write('\nNo es \n'PREG))  .
+
+
+
+
+clona_lista([], []).
+clona_lista([C|R], [C|R1]):-clona_lista(R, R1).
+
+
+elige_persona(X,Y,T,T1,C,PERPC):-
+
+                    length(T,L),
+                    random(0,L,Aleat),
+                    nth0(Aleat,T,X),  %coge pos Aleat de lista T y o guarda en X
+                    writeln(X),
+                    delete(T,X,T1), % lo quita para no repetir , T1 sin el del ordenador
+
+                         length(T1,L2),
+                    random(0,L2,Aleat1),
+                    nth0(Aleat1,T1,Y),
+                    writeln(Y),
+                    delete(T1,Y,T2), % lo quita para no repetir,T2 sin ambos
+
+                    nth0(Aleat,C,PERPC) %coge el personaje con sus caracteristicas
+
+                                       .
+
+
+
+
+
+
+%------------------------------------------------------------------------------
+%------------------------------------------------------------------------------
+empieza:-
+            todos(T),completo(C),
+
+            todos(LISTA_JUG),todos(LISTA_ORD),
+
+            %writeln(LISTA_JUG),
+
+         elige_persona(ORD,JUG,T,T1,C,PERPC),   %T1 sin el del ordenador- T con todos-ORD es el nombre de la maq, JUG del jugador
+
+
+           writeln('ordena: 'PERPC) ,
+
+          writeln('\nPersonajes elegidos, el tuyo es 'JUG'\nPersonajes posibles:'),
+
+          mostrar(C),
+
+           quien_empieza,   %ver quien empieza
+
+
+
+
+          pregunta_jugador(PREG) ,
+
+         maquina(PREG,PERPC)
+
+
+
+
+                             .
