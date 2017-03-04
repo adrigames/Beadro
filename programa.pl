@@ -3,7 +3,7 @@
 
 consult(practica1).
 
-%FUNCIONES
+%CONSULTAS AUXILIARES
 
 %posicion devuelve la posicion de un elemento.
 posicion(ELEMENTO,[ELEMENTO|_],0).
@@ -13,3 +13,4 @@ posicion(ELEMENTO,[_|LIS],Posicion):-posicion(ELEMENTO,LIS,Posi), Posicion is Po
 imprimirLis([]).
 imprimirLis([ELEMENTO|LIS]):- writeln(ELEMENTO),imprimirLis(LISTA).
 
+moneda(X):-random(0,2,X),write(X).
