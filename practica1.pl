@@ -1,7 +1,6 @@
 % Autor:
 % Fecha: 16/02/2017
 
-hola:- writeln('funciona').
 
 chico([albert,paul,tom,derek,richard,louis,michael,charles,sam,steve,will,anthony,billy,henry]).
 chica([tiffany,natalie,roxanne,sarah,sabrina,cindy,emma]).

@@ -50,7 +50,7 @@ sorteo_inicial(X):- random(0,2,X),
 writeln('Empieza la maquina.')).
 
 %-----------inicializar
-
+%inicializar(Listas,Personajes,Preguntas):-
 inicializar(Chicos,Chicas,PN,PR,RR,RV,F,T,G,OA,OM,Personajes,Preguntas):-
 chico(Chicos),
 chica(Chicas),
@@ -64,7 +64,13 @@ gafas(G),
 ojos_azules(OA),
 ojos_marrones(OM),
 personaje(Personajes),
-preguntas(Preguntas).
+preguntas(Preguntas)
+%,Listas=(Chicos,Chicas,PN,PR,RR,RV,F,T,G,OA,OM)                          revisar esto
+.
+
+%concatenar listas
+conc([],L,L).
+conc([X|A],L,[X|B]) :- conc(A,L,B).
 
 
 %-----------pertenencia elemento lista
@@ -80,9 +86,8 @@ elimina(X,[Y|Y1],[Y|Z1]):- elimina(X, Y1, Z1).
 inicializar_personajes(PersonajeJugador, PersonajeMaquina, ListaPersonajes):-
 
 personaje_jugador(PersonajeJugador,ListaPersonajes),
-personaje_maquina(PersonajeMaquina,PersonajeJugador,ListaPersonajes),
-writeln(PersonajeJugador),writeln(PersonajeMaquina).
-
+personaje_maquina(PersonajeMaquina,PersonajeJugador,ListaPersonajes)/*,
+writeln(PersonajeJugador),writeln(PersonajeMaquina)*/.
 
 personaje_jugador(P,L):-
 length(L,N),random(0,N,Ns),
@@ -92,6 +97,26 @@ personaje_maquina(Pj,P,L):-
 elimina(P,L,Ls),
 length(Ls,N),random(0,N,Ns)
 ,nth0(Ns,Ls,Pj).
+
+
+%turno jugador
+/*
+  se comprueba si ha ganado la maquina, si no, el jugador hace pregunta
+  coge la lista de la pregunta y, si el nombre del personaje de la maquina coincide con alguno de la lista,
+  la nueva lista solo contendra los coincidentes entre la lista de la pregunta y la lista que se tenía;
+  si la respuesta es no, se quitan todos los de la lista de la pregunta en la lista actual.
+  una vez tenemos las listas nuevas, pasamos turno a la maquina
+*/
+
+turnoJ(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,Listalistas):-
+length(ListaM,N)=:=1 -> writeln('Has perdido.');
+writeln('Introduzca una pregunta.')
+.
+
+
+
+
+
 
 %CONSULTAS AUXILIARES
 
