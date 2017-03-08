@@ -111,7 +111,7 @@ length(Ls,N),random(0,N,Ns)
 turnoJ(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,Listalistas):-
 length(ListaM,N)=:=1 -> writeln('Has perdido.');
 writeln('Introduzca una pregunta.')
-.
+.                                                              '
 
 
 
