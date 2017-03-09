@@ -152,6 +152,7 @@ turno_M(PJ,PM,ListaJ2,ListaM,PreguntasJ2,PreguntasM,ListasJ2,ListasM))
 
 turno_J(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM):-
 length(ListaM,N), (N=:=1 -> writeln('Has perdido.');
+writeln(''),
 writeln('Tu turno.'),
 writeln('Lista de preguntas restantes:'),
 print_l(PreguntasJ),
@@ -172,7 +173,7 @@ turno_J(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM)))
 %---------turno maquina
 
 turno_M(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM):-
-length(ListaM,N), (N=:=1 -> writeln('Has Ganado.');
+length(ListaJ,N), (N=:=1 -> writeln('Has Ganado.');
 writeln(''),
 writeln('Turno de la maquina.'),
 writeln('Lista de preguntas restantes:'),
@@ -190,8 +191,14 @@ nth0(Y,ListasM,ListaAux),elimina(ListaAux,ListasM,ListasM2),
 write('Pregunta de la maquina: '),
 writeln(X),
 subtract(ListaM,ListaAux,ListaM2),
-(pertenece(PM,ListaAux) -> subtract(ListaM,ListaM2,ListaM3),
-turno_M(PJ,PM,ListaJ,ListaM3,PreguntasJ,PreguntasM2,ListasJ,ListasM2)
+writeln('Posibles personajes jugador antes: '),
+print_l(ListaM),
+(pertenece(PJ,ListaAux) -> subtract(ListaM,ListaM2,ListaM3),
+writeln('Posibles personajes jugador despues: '),
+print_l(ListaM3),
+turno_J(PJ,PM,ListaJ,ListaM3,PreguntasJ,PreguntasM2,ListasJ,ListasM2)
 ;
-turno_M(PJ,PM,ListaJ,ListaM2,PreguntasJ,PreguntasM2,ListasJ,ListasM2))
+writeln('Posibles personajes jugador despues: '),
+print_l(ListaM2),
+turno_J(PJ,PM,ListaJ,ListaM2,PreguntasJ,PreguntasM2,ListasJ,ListasM2))
 .
