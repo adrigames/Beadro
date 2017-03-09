@@ -19,7 +19,7 @@ elimina(X,[Y|Y1],[Y|Z1]):- elimina(X, Y1, Z1).
 print_l([]):- writeln('').
 print_l([X|L]):- write(X), write(', '), print_l(L).
 
-imprimirpreguntas:- preguntas(X),print_l(X).
+%imprimirpreguntas:- preguntas(X),print_l(X).
 
 %-----------------empezar el juego
 inicio:-
@@ -40,10 +40,12 @@ inicializar(ListasM,ListaM,PreguntasM),
 inicializar_personajes(PJ,PM,ListaJ),
 elimina(PJ,ListaJ,PersonajesJ),
 elimina(PM,ListaM,PersonajesM),
+writeln(PJ),
+writeln(PM),
 sorteo_inicial(X),
-X==0 -> turno_J(PJ,PM,PersonajesJ,PersonajesM,PreguntasJ,PreguntasM,ListasJ,ListasM)
+(X=:=0 -> turno_J(PJ,PM,PersonajesJ,PersonajesM,PreguntasJ,PreguntasM,ListasJ,ListasM)
 ;
-turno_M(PJ,PM,PersonajesJ,PersonajesM,PreguntasJ,PreguntasM,ListasJ,ListasM)
+turno_M(PJ,PM,PersonajesJ,PersonajesM,PreguntasJ,PreguntasM,ListasJ,ListasM))
 .
 
 jugar(Dificultad):-
@@ -68,7 +70,7 @@ writeln('No hay mas opciones, elija una de las disponibles.'),inicio
 
 %---------- sorteo jugador 1: empieza maquina / empieza jugador
 
-sorteo_inicial(X):- random(0,2,X),
+sorteo_inicial(X):- random(0,1,X),
 (X=:=0 -> writeln('Empieza el jugador.');
 writeln('Empieza la maquina.')).
 
@@ -133,22 +135,23 @@ nth0(Ns,Ls,Pj)
 
 comprobacion_jugador(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,X):-
 writeln('Candidatos antes de la eliminación: '),
-print_l(PreguntasJ),
+print_l(ListaJ),
 nth0(Y,PreguntasJ,X),elimina(X,PreguntasJ,PreguntasJ2),
 nth0(Y,ListasJ,ListaAux),elimina(ListaAux,ListasJ,ListasJ2),
-subtract(ListaAux,ListaJ,ListaJ2),
 print_l(ListaAux),
+subtract(ListaJ,ListaAux,ListaJ2),
+print_l(ListaJ2),
 writeln('Candidatos depués de la eliminación: '),
-pertenece(PM,ListaAux)->subtract(ListaJ2,ListaJ,ListaJ3),
+(pertenece(PM,ListaAux)->subtract(ListaJ,ListaJ2,ListaJ3),
 print_l(ListaJ3),
 turno_M(PJ,PM,ListaJ3,ListaM,PreguntasJ2,PreguntasM,ListasJ2,ListasM)
 ;
 print_l(ListaJ2),
-turno_M(PJ,PM,ListaJ2,ListaM,PreguntasJ2,PreguntasM,ListasJ2,ListasM)
+turno_M(PJ,PM,ListaJ2,ListaM,PreguntasJ2,PreguntasM,ListasJ2,ListasM))
 .
 
 turno_J(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM):-
-length(ListaM,N), N=:=1 -> writeln('Has perdido.');
+length(ListaM,N), (N=:=1 -> writeln('Has perdido.');
 writeln('Tu turno.'),
 writeln('Lista de preguntas restantes:'),
 print_l(PreguntasJ),
@@ -157,26 +160,27 @@ print_l(ListaJ),
 writeln('Introduzca una pregunta:'),
 print_l(PreguntasJ),
 read(X),
-pertenece(X,PreguntasJ) ->
+(pertenece(X,PreguntasJ) ->
 %writeln('vamoh a comprobah'),
 comprobacion_jugador(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,X)
 ;
 writeln('mala pregunta'),
-turno_J(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM)
+turno_J(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM)))
 .
 
 
 %---------turno maquina
 
 turno_M(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM):-
-length(ListaM,N), N=:=1 -> writeln('Has Ganado.');
+length(ListaM,N), (N=:=1 -> writeln('Has Ganado.');
+writeln(''),
 writeln('Turno de la maquina.'),
 writeln('Lista de preguntas restantes:'),
 print_l(PreguntasM),
 writeln('Lista de candidatos de la maquina:'),
 print_l(ListaM),
 length(PreguntasM,X),random(0,X,Y)
-,comprobacion_maquina(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Y)
+,comprobacion_maquina(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Y))
 .
 
 comprobacion_maquina(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Y):-
@@ -185,9 +189,9 @@ nth0(Y,PreguntasM,X),elimina(X,PreguntasM,PreguntasM2),
 nth0(Y,ListasM,ListaAux),elimina(ListaAux,ListasM,ListasM2),
 write('Pregunta de la maquina: '),
 writeln(X),
-subtract(ListaAux,ListaM,ListaM2),
-pertenece(PM,ListaAux)->subtract(ListaM2,ListaM,ListaM3),
+subtract(ListaM,ListaAux,ListaM2),
+(pertenece(PM,ListaAux) -> subtract(ListaM,ListaM2,ListaM3),
 turno_M(PJ,PM,ListaJ,ListaM3,PreguntasJ,PreguntasM2,ListasJ,ListasM2)
 ;
-turno_M(PJ,PM,ListaJ,ListaM2,PreguntasJ,PreguntasM2,ListasJ,ListasM2)
+turno_M(PJ,PM,ListaJ,ListaM2,PreguntasJ,PreguntasM2,ListasJ,ListasM2))
 .
