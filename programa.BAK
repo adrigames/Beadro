@@ -40,8 +40,8 @@ inicializar(ListasM,ListaM,PreguntasM),
 inicializar_personajes(PJ,PM,ListaJ),
 elimina(PJ,ListaJ,PersonajesJ),
 elimina(PM,ListaM,PersonajesM),
+writeln('Tu personaje es'),
 writeln(PJ),
-writeln(PM),
 sorteo_inicial(X),
 (X=:=0 -> turno_J(PJ,PM,PersonajesJ,PersonajesM,PreguntasJ,PreguntasM,ListasJ,ListasM)
 ;
@@ -70,7 +70,7 @@ writeln('No hay mas opciones, elija una de las disponibles.'),inicio
 
 %---------- sorteo jugador 1: empieza maquina / empieza jugador
 
-sorteo_inicial(X):- random(0,1,X),
+sorteo_inicial(X):- random(0,2,X),
 (X=:=0 -> writeln('Empieza el jugador.');
 writeln('Empieza la maquina.')).
 
