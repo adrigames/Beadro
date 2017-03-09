@@ -118,8 +118,8 @@ nth0(Ns,L,P).
 
 personaje_maquina(Pj,P,L):-
 elimina(P,L,Ls),
-length(Ls,N),random(0,N,Ns)
-,nth0(Ns,Ls,Pj)
+length(Ls,N),random(0,N,Ns),
+nth0(Ns,Ls,Pj)
 .
 
 %turno jugador
@@ -132,14 +132,18 @@ length(Ls,N),random(0,N,Ns)
 */
 
 comprobacion_jugador(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,X):-
-writeln('entra'),
+writeln('Candidatos antes de la eliminación: '),
 print_l(PreguntasJ),
 nth0(Y,PreguntasJ,X),elimina(X,PreguntasJ,PreguntasJ2),
 nth0(Y,ListasJ,ListaAux),elimina(ListaAux,ListasJ,ListasJ2),
 subtract(ListaAux,ListaJ,ListaJ2),
+print_l(ListaAux),
+writeln('Candidatos depués de la eliminación: '),
 pertenece(PM,ListaAux)->subtract(ListaJ2,ListaJ,ListaJ3),
+print_l(ListaJ3),
 turno_M(PJ,PM,ListaJ3,ListaM,PreguntasJ2,PreguntasM,ListasJ2,ListasM)
 ;
+print_l(ListaJ2),
 turno_M(PJ,PM,ListaJ2,ListaM,PreguntasJ2,PreguntasM,ListasJ2,ListasM)
 .
 
@@ -154,7 +158,7 @@ writeln('Introduzca una pregunta:'),
 print_l(PreguntasJ),
 read(X),
 pertenece(X,PreguntasJ) ->
-writeln('vamoh a comprobah'),
+%writeln('vamoh a comprobah'),
 comprobacion_jugador(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,X)
 ;
 writeln('mala pregunta'),
@@ -171,7 +175,7 @@ writeln('Lista de preguntas restantes:'),
 print_l(PreguntasM),
 writeln('Lista de candidatos de la maquina:'),
 print_l(ListaM),
-length(ListaPreguntasM,X),random(0,X,Y),
+length(PreguntasM,X),random(0,X,Y)
 ,comprobacion_maquina(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Y)
 .
 
