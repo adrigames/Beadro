@@ -1,0 +1,5 @@
+1- Añadir a una lista los resultados de las ramas negativas.
+2- Añadir a una lista los resultados de las ramas afirmativas.
+3- Restar posicion por posicion, guardar los resultados en otra lista.
+4- Coger la posicion del elemento mas pequeño de esa lista.
+5- Esa posición es la misma que la de la mejor pregunta.
