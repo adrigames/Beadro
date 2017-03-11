@@ -180,6 +180,8 @@ writeln('Lista de preguntas restantes:'),
 print_l(PreguntasM),
 writeln('Lista de candidatos de la maquina:'),
 print_l(ListaM),
+writeln('QUE ES ESTO'),
+print_l(ListasM),
 length(PreguntasM,X),random(0,X,Y)
 ,comprobacion_maquina(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Y))
 .
@@ -202,3 +204,6 @@ writeln('Posibles personajes jugador despues: '),
 print_l(ListaM2),
 turno_J(PJ,PM,ListaJ,ListaM2,PreguntasJ,PreguntasM2,ListasJ,ListasM2))
 .
+
+%-----------------Modo dificil-------------------------
+elegir_pregunta(PreguntasM, ListasM).

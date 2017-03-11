@@ -180,6 +180,8 @@ writeln('Lista de preguntas restantes:'),
 print_l(PreguntasM),
 writeln('Lista de candidatos de la maquina:'),
 print_l(ListaM),
+writeln('QUE ES ESTO'),
+print_l(ListasM),
 length(PreguntasM,X),random(0,X,Y)
 ,comprobacion_maquina(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Y))
 .
@@ -202,3 +204,26 @@ writeln('Posibles personajes jugador despues: '),
 print_l(ListaM2),
 turno_J(PJ,PM,ListaJ,ListaM2,PreguntasJ,PreguntasM2,ListasJ,ListasM2))
 .
+
+%-----------------Modo dificil-------------------------
+elegir_pregunta(PreguntasM,ListasM,ListaM,Y):-
+crear_ramas(ListaA,ListaN,ListasM,ListaM),
+restar(ListaA,ListaN,Y).
+%Crear ramas, crea dos listas con las longitudes a una respuesta afirmativa y a una respuesta negativa
+crear_ramas(ListaA,ListaN,[],ListaM).
+crear_ramas(ListaA,ListaN,[X|ListasM],ListaM):-
+crear_ramas(ListaA,ListaN,ListasM,ListaM)
+subtract(ListaM,X,ListaM2),
+subtract(ListaM,ListaM2,ListaM3),
+length(ListaM2,L1),
+length(ListaM3,L2),
+insertar(L1,ListaN,ListaN),
+insertar(L2,ListaA,ListaA).
+
+%restar, devuelve la posicion de la mejor pregunta
+restar([],[],Y):- Y is 100.
+restar([E1|ListaA],[E2|ListaN],Y):-
+restar(ListaA,ListaN,Y1),
+(E1>E2 -> Y is E1-E2;
+Y is E2-E1),
+(Y>Y1 -> Y is Y1).
