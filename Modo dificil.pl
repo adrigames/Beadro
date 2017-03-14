@@ -6,10 +6,21 @@
 %--------------------------------- funciones
 
 
+
+
+cien(X):- X is 100.
+cero(X):- X is 0.
+
+
 %ultimo elemento de una lista
 ultimo_elemento([Y], Y).
 
 ultimo_elemento([_|Xs], Y):- ultimo_elemento(Xs, Y).
+
+%incrementar
+
+incrementar(X,X1):-
+X1 is X+1.
 
 
 %------------concatenar listas
@@ -84,6 +95,13 @@ length(Ls,N),random(0,N,Ns),
 nth0(Ns,Ls,Pj)
 .
 
+diferencia(X,Y,Z):-
+D is X - Y,
+(D > 0 ->
+Z is D
+;
+Z is Y - X )
+.
 
 %----------------------------------------------------------------
 
@@ -102,19 +120,6 @@ writeln('Gracias por jugar').
 
 %------------------inicia el juego con dificultad 1 o 2 o sale del juego
 
-comenzar_dificil:-
-inicializar(ListasJ,ListaJ,PreguntasJ),
-inicializar(ListasM,ListaM,PreguntasM),
-inicializar_personajes(PJ,PM,ListaJ),
-elimina(PJ,ListaJ,PersonajesJ),
-elimina(PM,ListaM,PersonajesM),
-writeln('Tu personaje es'),
-writeln(PJ),
-sorteo_inicial(X),
-(X=:=0 -> turno_J_dificil(PJ,PM,PersonajesJ,PersonajesM,PreguntasJ,PreguntasM,ListasJ,ListasM)
-;
-turno_M_dificil(PJ,PM,PersonajesJ,PersonajesM,PreguntasJ,PreguntasM,ListasJ,ListasM))
-.
 
 jugar(Dificultad):-
 Dificultad=:=1 ->
@@ -131,6 +136,19 @@ writeln('No hay mas opciones, elija una de las disponibles.'),inicio
 .
 
 
+comenzar_dificil:-
+inicializar(ListasJ,ListaJ,PreguntasJ),
+inicializar(ListasM,ListaM,PreguntasM),
+inicializar_personajes(PJ,PM,ListaJ),
+elimina(PJ,ListaJ,PersonajesJ),
+elimina(PM,ListaM,PersonajesM),
+writeln('Tu personaje es'),
+writeln(PJ),
+sorteo_inicial(X),
+(X=:=0 -> turno_J_dificil(PJ,PM,PersonajesJ,PersonajesM,PreguntasJ,PreguntasM,ListasJ,ListasM)
+;
+turno_M_dificil(PJ,PM,PersonajesJ,PersonajesM,PreguntasJ,PreguntasM,ListasJ,ListasM))
+.
 %turno jugador
 /*
   se comprueba si ha ganado la maquina, si no, el jugador hace pregunta
@@ -149,7 +167,7 @@ print_l(ListaAux),
 subtract(ListaJ,ListaAux,ListaJ2),
 print_l(ListaJ2),
 writeln('Candidatos depués de la eliminación: '),
-(pertenece(PM,ListaAux)->subtract(ListaJ,ListaJ2,ListaJ3),
+(pertenece(PM,ListaAux) -> subtract(ListaJ,ListaJ2,ListaJ3),
 print_l(ListaJ3),
 turno_M_dificil(PJ,PM,ListaJ3,ListaM,PreguntasJ2,PreguntasM,ListasJ2,ListasM)
 ;
@@ -188,16 +206,45 @@ writeln(''),
 writeln('Turno de la maquina.'),
 writeln('Lista de preguntas restantes:'),
 print_l(PreguntasM),
-writeln('Lista de candidatos de la maquina:'),
-print_l(ListaM),
-elegir_pregunta(PreguntasM,ListasM,ListaM,Y),
-comprobacion_maquina(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Y)
+cien(Cien),
+cero(Pregunta0),
+cero(Contador),
+elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Cien,Pregunta0,Contador) %empieza con una diferencia amplia y en la primera pregunta
 )
 .
 
+%elegir pregunta
+/*
+  esta funcion irá pasando la lista y calculando la diferencia, pasando el numero de pregunta y la diferencia de opcin si y no
+  de esta manera, el que sea menor se transmite y cuando se hayan visto todas las preguntas se llama a comprobación
+*/
+
+elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,DiferenciaActual,Pregunta,Contador):-
+length(PreguntasM,X),
+(
+Contador=:=X ->
+%salir y llamar a comprobacion_maquina
+comprobacion_maquina(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Pregunta)
+;
+%continuamos buscando la mejor pregunta
+nth0(Contador,ListasM,Y), %cogemos los participantes de la pregunta correspondiente
+incrementar(Contador,NuevoContador),
+subtract(ListaM,Y,ListaM2),
+subtract(ListaM,ListaM2,ListaM3),
+length(ListaM2,M2),length(ListaM3,M3),
+diferencia(M2,M3,NuevaDiferencia),
+(
+DiferenciaActual > NuevaDiferencia ->
+%si mejora la pregunta, se utilizara el contador como nueva pregunta y se calcula la nueva diferencia
+elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,NuevaDiferencia,Contador,NuevoContador)
+;
+%si sigue igual, pasamos la diferencia anterior y la pregunta anterior
+elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,DiferenciaActual,Pregunta,NuevoContador)
+)
+)
+.
 
 comprobacion_maquina(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Y):-
-print_l(PreguntasM),
 nth0(Y,PreguntasM,X),elimina(X,PreguntasM,PreguntasM2),
 nth0(Y,ListasM,ListaAux),elimina(ListaAux,ListasM,ListasM2),
 write('Pregunta de la maquina: '),
@@ -208,62 +255,9 @@ print_l(ListaM),
 (pertenece(PJ,ListaAux) -> subtract(ListaM,ListaM2,ListaM3),
 writeln('Posibles personajes jugador despues: '),
 print_l(ListaM3),
-turno_J(PJ,PM,ListaJ,ListaM3,PreguntasJ,PreguntasM2,ListasJ,ListasM2)
+turno_J_dificil(PJ,PM,ListaJ,ListaM3,PreguntasJ,PreguntasM2,ListasJ,ListasM2)
 ;
 writeln('Posibles personajes jugador despues: '),
 print_l(ListaM2),
-turno_J(PJ,PM,ListaJ,ListaM2,PreguntasJ,PreguntasM2,ListasJ,ListasM2))
+turno_J_dificil(PJ,PM,ListaJ,ListaM2,PreguntasJ,PreguntasM2,ListasJ,ListasM2))
 .
-
-%-----------------Modo dificil-------------------------
-
-%Crear ramas, crea dos listas con las longitudes a una respuesta afirmativa y a una respuesta negativa
-/*crear_ramas(ListaA,ListaN,[],ListaM,Y):-
-restar(ListaA,ListaN,Y)
-writeln('Ramas vacio.').*/
-
-crear_ramas(ListaA,ListaN,ListasM,ListaM,Y):-
-length(ListasM,L),
-(L=:=0->
-restar(ListaA,ListaN,D),
-Y=D;
-writeln('Ramas llenas.'),
-writeln('Ramas a substraer.'),
-length(ListasM,Z),
-Z--,
-/*ultimo_elemento(ListasM,X),*/
-nth0(Z,ListasM,X),elimina(X,ListasM,ListasMAux),
-print_l(X),
-%subtract(ListasM,X,ListasMAux),
-subtract(ListaM,X,ListaM2),     %listam2 no lo tienen
-subtract(ListaM,ListaM2,ListaM3),   %listam3 si lo tienen
-length(ListaM2,L1),
-length(ListaM3,L2),                  /*writeln('Funciona hijueputa.'),print_l(ListaN),writeln('Esto no te modifica la lista loquita.'),         */
-insertar(L1,ListaN,ListaJ),
-insertar(L2,ListaA,ListaB),          /*writeln('Inserta 1'),print_l(ListaJ),             */
-crear_ramas(ListaB,ListaJ,ListasMAux,ListaM,Q),
-Y=Q).
-
-elegir_pregunta(PreguntasM,ListasM,ListaM,Y):-
-writeln(''),
-writeln('Entrando en crear ramas.'),
-ListaA = [],ListaB = [],
-crear_ramas(ListaA,ListaB,ListasM,ListaM,Z),
-Y=Z,
-writeln('Saliendo de crear ramas'),
-writeln('Entrando en restar'),      %restar(ListaA,ListaN,Y),
-writeln('Saliendo de restar').
-
-
-
-%restar, devuelve la posicion de la mejor pregunta
-restar([],[],Y):- Y is 100.
-restar([E1|ListaA],[E2|ListaN],Y):-
-write(Y),
-restar(ListaA,ListaN,Y1),
-writeln('ERROR loquita'),
-(E1>E2 -> Y is E1-E2;
-Y is E2-E1),
-(Y>Y1 -> Y is Y1),
-writeln(Y),
-writeln('Otro error loquita').
