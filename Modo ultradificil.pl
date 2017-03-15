@@ -96,11 +96,15 @@ nth0(Ns,Ls,Pj)
 .
 
 diferencia(X,Y,Z):-
+%(X =:= 0 -> Z is -100;
+%(Y =:= 0 -> Z is -100;
 D is X - Y,
 (D > 0 ->
 Z is D
 ;
 Z is Y - X )
+%)
+%)
 .
 
 %----------------------------------------------------------------
@@ -163,9 +167,7 @@ writeln('Candidatos antes de la eliminación: '),
 print_l(ListaJ),
 nth0(Y,PreguntasJ,X),elimina(X,PreguntasJ,PreguntasJ2),
 nth0(Y,ListasJ,ListaAux),elimina(ListaAux,ListasJ,ListasJ2),
-print_l(ListaAux),
 subtract(ListaJ,ListaAux,ListaJ2),
-print_l(ListaJ2),
 writeln('Candidatos depués de la eliminación: '),
 (pertenece(PM,ListaAux) -> subtract(ListaJ,ListaJ2,ListaJ3),
 print_l(ListaJ3),
@@ -231,16 +233,25 @@ nth0(Contador,ListasM,Y), %cogemos los participantes de la pregunta correspondie
 incrementar(Contador,NuevoContador),
 subtract(ListaM,Y,ListaM2),
 subtract(ListaM,ListaM2,ListaM3),
-length(ListaM2,M2),length(ListaM3,M3),
+length(ListaM2,M2),length(ListaM3,M3),length(ListaM,M),
 diferencia(M2,M3,NuevaDiferencia),
-(
-DiferenciaActual < NuevaDiferencia ->
-%si mejora la pregunta, se utilizara el contador como nueva pregunta y se calcula la nueva diferencia
-elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,NuevaDiferencia,Contador,NuevoContador)
-;
+(M2 =:= 0 ->
 %si sigue igual, pasamos la diferencia anterior y la pregunta anterior
 elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,DiferenciaActual,Pregunta,NuevoContador)
+;(M3 =:= 0 ->
+     %si sigue igual, pasamos la diferencia anterior y la pregunta anterior
+     elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,DiferenciaActual,Pregunta,NuevoContador)
+     ;                            (
+                                  DiferenciaActual =< NuevaDiferencia ->
+                                  %si mejora la pregunta, se utilizara el contador como nueva pregunta y se calcula la nueva diferencia
+                                  elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,NuevaDiferencia,Contador,NuevoContador)
+                                  ;
+                                  %si sigue igual, pasamos la diferencia anterior y la pregunta anterior
+                                  elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,DiferenciaActual,Pregunta,NuevoContador)
+                                  )
+     )
 )
+
 )
 .
 

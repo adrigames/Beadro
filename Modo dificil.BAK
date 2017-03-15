@@ -112,7 +112,7 @@ Z is Y - X )
 inicio:-
 writeln('Quien es quien'),
 writeln('Elija dificultad'),
-writeln('\tJuego modo ificil: 1.'),
+writeln('\tJuego modo dificil: 1.'),
 writeln('\tNo quiero jugar: 2.'),
 read(Dificultad),
 jugar(Dificultad),
@@ -127,7 +127,7 @@ writeln('Jugando al dificil...'),
 %writeln('Modo no disponible, compre el dlc')
 %hueco formula juego dificil
 comenzar_dificil.
-.
+
 
 jugar(Dificultad):-
 Dificultad=:=2 ->

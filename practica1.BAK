@@ -17,3 +17,82 @@ ojos_marrones([paul,tom,derek,michael,charles,steve,anthony,henry,tiffany,sarah,
 personaje([albert,paul,tom,derek,richard,louis,michael,charles,sam,steve,will,anthony,billy,henry,tiffany,natalie,roxanne,sarah,sabrina,cindy,emma]).
 
 preguntas([chico,chica,pelo_negro,pelo_rubio,ropa_roja,ropa_verde,feliz,triste,gafas,ojos_azules,ojos_marrones]).
+ /*
+%-----------funciones
+
+%-----------inicializar
+
+inicializar(Listas,Personajes,Preguntas):-
+chico(Chicos),
+chica(Chicas),
+pelo_negro(PN),
+pelo_rubio(PR),
+ropa_roja(RR),
+ropa_verde(RV),
+feliz(F),
+triste(T),
+gafas(G),
+ojos_azules(OA),
+ojos_marrones(OM),
+personaje(Personajes),
+preguntas(Preguntas),
+insertar(OM,[],R1),
+insertar(OA,R1,R2),
+insertar(G,R2,R3),
+insertar(T,R3,R4),
+insertar(F,R4,R5),
+insertar(RV,R5,R6),
+insertar(RR,R6,R7),
+insertar(PR,R7,R8),
+insertar(PN,R8,R9),
+insertar(Chicas,R9,R10),
+insertar(Chicos,R10,Listas)
+.
+
+insertar(X, Lista, Resultado) :- Resultado = [X|Lista].
+
+
+%---------- sorteo jugador 1: empieza maquina / empieza jugador
+
+sorteo_inicial(X):- random(0,2,X),
+(X=:=0 -> writeln('Empieza el jugador.');
+writeln('Empieza la maquina.')).
+
+%------------concatenar listas
+conc([],L,L).
+conc([X|A],L,[X|B]) :- conc(A,L,B).
+%-----------pertenencia elemento lista
+pertenece(C, [C|_]) :- !.
+pertenece(C, [_|R]) :- pertenece(C,R).
+
+%-----------eliminar elemento lista
+elimina(X,[X|X1],X1).
+elimina(X,[Y|Y1],[Y|Z1]):- elimina(X, Y1, Z1).
+
+%-----------------mostrar una lista
+print_l([]):- writeln('').
+print_l([X|L]):- write(X), write(', '), print_l(L).
+
+
+
+%---------inicializar personajes
+
+inicializar_personajes(PersonajeJugador, PersonajeMaquina, ListaPersonajes):-
+
+personaje_jugador(PersonajeJugador,ListaPersonajes),
+personaje_maquina(PersonajeMaquina,PersonajeJugador,ListaPersonajes)
+.
+
+personaje_jugador(P,L):-
+length(L,N),random(0,N,Ns),
+nth0(Ns,L,P).
+
+personaje_maquina(Pj,P,L):-
+elimina(P,L,Ls),
+length(Ls,N),random(0,N,Ns),
+nth0(Ns,Ls,Pj)
+.
+        */
+
+
+
