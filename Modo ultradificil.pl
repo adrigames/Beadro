@@ -112,7 +112,7 @@ Z is Y - X )
 inicio:-
 writeln('Quien es quien'),
 writeln('Elija dificultad'),
-writeln('\tJuego modo dificil: 1.'),
+writeln('\tJuego modo ultra dificil: 1.'),
 writeln('\tNo quiero jugar: 2.'),
 read(Dificultad),
 jugar(Dificultad),
@@ -206,7 +206,7 @@ writeln(''),
 writeln('Turno de la maquina.'),
 writeln('Lista de preguntas restantes:'),
 print_l(PreguntasM),
-cien(Cien),
+cero(Cien),
 cero(Pregunta0),
 cero(Contador),
 elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,Cien,Pregunta0,Contador) %empieza con una diferencia amplia y en la primera pregunta
@@ -234,7 +234,7 @@ subtract(ListaM,ListaM2,ListaM3),
 length(ListaM2,M2),length(ListaM3,M3),
 diferencia(M2,M3,NuevaDiferencia),
 (
-DiferenciaActual > NuevaDiferencia ->
+DiferenciaActual < NuevaDiferencia ->
 %si mejora la pregunta, se utilizara el contador como nueva pregunta y se calcula la nueva diferencia
 elegir_pregunta(PJ,PM,ListaJ,ListaM,PreguntasJ,PreguntasM,ListasJ,ListasM,NuevaDiferencia,Contador,NuevoContador)
 ;
